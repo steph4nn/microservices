@@ -12,6 +12,8 @@ import (
 	"github.com/ruandg/microservices/order/internal/ports"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (a Adapter) Create(ctx context.Context, request *order.CreateOrderRequest) (*order.CreateOrderResponse, error) {
@@ -26,6 +28,9 @@ func (a Adapter) Create(ctx context.Context, request *order.CreateOrderRequest) 
 	newOrder := domain.NewOrder(int64(request.CostumerId), orderItems)
 	result, err := a.api.PlaceOrder(newOrder)
 	if err != nil {
+		if err == domain.ErrOrderItemLimitExceeded {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
 		return nil, err
 	}
 	return &order.CreateOrderResponse{OrderId: int32(result.ID)}, nil

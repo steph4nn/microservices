@@ -1,4 +1,4 @@
-package payment_adapter
+package payment
 
 import (
 	"context"
@@ -11,29 +11,25 @@ import (
 )
 
 type Adapter struct {
-payment payment . PaymentClient // come from the generated code by the protobuf
-compiler
+	payment payment.PaymentClient // comes from generated protobuf code
 }
 
-func NewAdapter ( paymentServiceUrl string ) (* Adapter , error ) {
-var opts [] grpc . DialOption
-opts = append ( opts , grpc . WithTransportCredentials ( insecure . NewCredentials () ) )
-conn , err := grpc . Dial ( paymentServiceUrl , opts ...)
-if err != nil {
-return nil , err
-}
-client := payment . NewPaymentClient ( conn ) // initialize the stub
-return & Adapter { payment : client } , nil
+func NewAdapter(paymentServiceUrl string) (*Adapter, error) {
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(paymentServiceUrl, opts...)
+	if err != nil {
+		return nil, err
+	}
+	client := payment.NewPaymentClient(conn) // initialize the stub
+	return &Adapter{payment: client}, nil
 }
 
-func ( a * Adapter ) Charge ( order * domain . Order ) error {
-_ , err := a . payment . Create ( context . Background () , & payment .
-CreatePaymentRequest {
-UserId : order . CustomerID ,
-
-OrderId : order . ID ,
-TotalPrice : order . TotalPrice () ,
-})
-return err
+func (a *Adapter) Charge(order *domain.Order) error {
+	_, err := a.payment.Create(context.Background(), &payment.CreatePaymentRequest{
+		UserId:     order.CustomerID,
+		OrderId:   order.ID,
+		TotalPrice: order.TotalPrice(),
+	})
+	return err
 }
-7 }

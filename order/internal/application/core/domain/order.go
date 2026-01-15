@@ -1,6 +1,9 @@
 package domain
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 type OrderItem struct {
 	ProductCode string  `json:"product_code"`
@@ -16,6 +19,8 @@ type Order struct {
 	CreatedAt  int64       `json:"created_at"`
 }
 
+var ErrOrderItemLimitExceeded = errors.New("order cannot exceed 50 total items")
+
 func NewOrder(customerID int64, orderItems []OrderItem) Order {
 	return Order{
 		CreatedAt:  time.Now().Unix(),
@@ -23,4 +28,12 @@ func NewOrder(customerID int64, orderItems []OrderItem) Order {
 		CustomerID: customerID,
 		OrderItems: orderItems,
 	}
+}
+
+func (o Order) TotalItemQuantity() int32 {
+	var total int32
+	for _, item := range o.OrderItems {
+		total += item.Quantity
+	}
+	return total
 }
