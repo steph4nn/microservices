@@ -15,7 +15,7 @@ func GetDataSourceURL() string {
 }
 
 func GetPaymentServiceUrl() string{
-	return getEnrionmentValue("PAYMENT_SERVICE_URL")
+	return getEnvironmentValue("PAYMENT_SERVICE_URL")
 }
 
 func GetApplicationPort() int {

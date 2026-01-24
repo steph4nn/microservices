@@ -7,7 +7,7 @@ import (
 
 	"github.com/huseyinbabal/microservices/payment/config"
 	"github.com/huseyinbabal/microservices/payment/internal/ports"
-	"github.com/ruandg/microservices-proto/golang/payment"
+	pb "github.com/ruandg/microservices-proto/golang/payment"
 	"google.golang.org/grpc/reflection"
 
 	"google.golang.org/grpc"
@@ -17,7 +17,7 @@ type Adapter struct {
 	api    ports.APIPort
 	port   int
 	server *grpc.Server
-	payment.UnimplementedPaymentServer
+	pb.UnimplementedPaymentServer
 }
 
 func NewAdapter(api ports.APIPort, port int) *Adapter {
@@ -34,7 +34,7 @@ func (a Adapter) Run() {
 
 	grpcServer := grpc.NewServer()
 	a.server = grpcServer
-	payment.RegisterPaymentServer(grpcServer, a)
+	pb.RegisterPaymentServer(grpcServer, a)
 	if config.GetEnv() == "development" {
 		reflection.Register(grpcServer)
 	}
