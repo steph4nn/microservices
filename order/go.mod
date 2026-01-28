@@ -3,6 +3,7 @@ module github.com/ruandg/microservices/order
 require (
 	github.com/ruandg/microservices-proto/golang/order v0.0.0-00010101000000-000000000000
 	github.com/ruandg/microservices-proto/golang/payment v0.0.0-00010101000000-000000000000
+	github.com/steph4nn/microservices-proto/golang/shipping v0.0.0
 	google.golang.org/grpc v1.78.0
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/gorm v1.31.1
@@ -24,5 +25,7 @@ require (
 replace github.com/ruandg/microservices-proto/golang/order => ../../microservices-proto/golang/order
 
 replace github.com/ruandg/microservices-proto/golang/payment => ../../microservices-proto/golang/payment
+
+replace github.com/steph4nn/microservices-proto/golang/shipping => ../../microservices-proto/golang/shipping
 
 go 1.25.2
